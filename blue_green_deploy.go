@@ -116,8 +116,8 @@ func (p *BlueGreenDeploy) PushNewApp(appName string, route plugin_models.GetApp_
 	manifestPath string, scaleParameters ScaleParameters) {
 	args := []string{"push", appName, "-n", route.Host, "-d", route.Domain.Name}
 
-	// Remove -new suffix of appname to get live app name
-	newAppSuffix := "-new"
+	// Remove -new2 suffix of appname to get live app name
+	newAppSuffix := "-new2"
 	liveAppName := appName[:len(appName)-len(newAppSuffix)]
 	liveScaleParameters, _ := p.GetScaleParameters(liveAppName)
 	scaleParameters = mergeScaleParameters(liveScaleParameters, scaleParameters)
@@ -132,7 +132,7 @@ func (p *BlueGreenDeploy) PushNewApp(appName string, route plugin_models.GetApp_
 }
 
 func (p *BlueGreenDeploy) GetOldApps(appName string, apps []plugin_models.GetAppsModel) (oldApps []plugin_models.GetAppsModel) {
-	r := regexp.MustCompile(fmt.Sprintf("^%s(-old|-failed|-new)?$", appName))
+	r := regexp.MustCompile(fmt.Sprintf("^%s(-old|-failed|-new2)?$", appName))
 	for _, app := range apps {
 		if !r.MatchString(app.Name) {
 			continue
@@ -143,7 +143,7 @@ func (p *BlueGreenDeploy) GetOldApps(appName string, apps []plugin_models.GetApp
 		// with no prefix, is not matched but others are. Equally, if the live app is the one without a suffix, perhaps it would be sufficient
 		// to check for the existence of a hyphen, in which case we could use something like strings.Count for hyphen instead of the regex.
 		// Then we would not need the if statement below.
-		if strings.HasSuffix(app.Name, "-old") || strings.HasSuffix(app.Name, "-failed") || strings.HasSuffix(app.Name, "-new") {
+		if strings.HasSuffix(app.Name, "-old") || strings.HasSuffix(app.Name, "-failed") || strings.HasSuffix(app.Name, "-new2") {
 			oldApps = append(oldApps, app)
 		}
 	}
@@ -151,7 +151,7 @@ func (p *BlueGreenDeploy) GetOldApps(appName string, apps []plugin_models.GetApp
 }
 
 func (p *BlueGreenDeploy) GetOldButNotFailedApps(appName string, apps []plugin_models.GetAppsModel) (oldApps []plugin_models.GetAppsModel) {
-	r := regexp.MustCompile(fmt.Sprintf("^%s(-old|-new)?$", appName))
+	r := regexp.MustCompile(fmt.Sprintf("^%s(-old|-new2)?$", appName))
 	for _, app := range apps {
 		if !r.MatchString(app.Name) {
 			continue
@@ -162,7 +162,7 @@ func (p *BlueGreenDeploy) GetOldButNotFailedApps(appName string, apps []plugin_m
 		// with no prefix, is not matched but others are. Equally, if the live app is the one without a suffix, perhaps it would be sufficient
 		// to check for the existence of a hyphen, in which case we could use something like strings.Count for hyphen instead of the regex.
 		// Then we would not need the if statement below.
-		if strings.HasSuffix(app.Name, "-old") || strings.HasSuffix(app.Name, "-new") {
+		if strings.HasSuffix(app.Name, "-old") || strings.HasSuffix(app.Name, "-new2") {
 			oldApps = append(oldApps, app)
 		}
 	}
