@@ -69,7 +69,7 @@ func (p *CfPlugin) Deploy(cfDomains manifest.CfDomains, manifestReader manifest.
 
 	// TODO We're overloading 'new' here for both the staging app and the 'finished' app, which is confusing
 	newAppRoutes := p.GetNewAppRoutes(args.AppName, cfDomains, manifestReader, liveAppRoutes)
-	newAppName := appName + "-new"
+	newAppName := appName + "-new2"
 
 	// Add route so that we can run the smoke tests
 	tempRouteDomain := newAppRoutes[0].Domain
